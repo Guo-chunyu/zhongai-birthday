@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>钟爱老师生日快乐！</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 重置和基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+        
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a0b2e, #4d1d4d, #ff6b9d);
+            color: #fff;
+            min-height: 100vh;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+        
+        /* 通用section样式 */
+        .page-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 5;
+            will-change: transform, opacity;
+        }
+        
+        /* 开场部分 */
+        .opening-section {
+            display: flex;
+            opacity: 1;
+            transition: opacity 1s;
+        }
+        
+        .birthday-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px #ff6b9d, 0 0 30px #ff4d8d;
+            text-align: center;
+            padding: 0 15px;
+            line-height: 1.2;
+            will-change: transform;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            animation: pulse 2s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1) translateZ(0); }
+            100% { transform: scale(1.05) translateZ(0); }
+        }
+        
+        /* 蛋糕和鲜花簇拥效果 - 手机优化 */
+        .surroundings {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        .cake, .flower {
+            position: absolute;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            opacity: 0.8;
+            will-change: transform;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        
+        /* 祝福语部分 */
+        .blessings-section {
+            display: none;
+            opacity: 0;
+        }
+        
+        .blessing-text {
+            font-size: clamp(1.8rem, 6vw, 3.5rem);
+            margin: 15px 0;
+            padding: 0 15px;
+            text-shadow: 0 0 15px #ffd166, 0 0 25px #ff9e6d;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px) translateZ(0);
+            transition: opacity 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                        transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, opacity;
+            -webkit-transform: translateZ(0);
+            line-height: 1.3;
+        }
+        
+        .blessing-text.active {
+            opacity: 1;
+            transform: translateY(0) translateZ(0);
+        }
+        
+        /* 蛋糕部分 */
+        .cake-section {
+            display: none;
+            opacity: 0;
+        }
+        
+        .cake-container {
+            position: relative;
+            width: min(300px, 80vw);
+            height: min(300px, 80vw);
+            margin: 20px auto;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        .cake-body {
+            position: absolute;
+            width: 80%;
+            height: 40%;
+            background: linear-gradient(to bottom, #ffc0cb, #ff69b4);
+            border-radius: 50% 50% 0 0;
+            bottom: 20%;
+            left: 10%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        .cake-top {
+            position: absolute;
+            width: 90%;
+            height: 20%;
+            background: linear-gradient(to bottom, #ffd1dc, #ff85a2);
+            border-radius: 50%;
+            bottom: 50%;
+            left: 5%;
+            z-index: 6;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        .candle {
+            position: absolute;
+            width: 4%;
+            height: 0;
+            background: linear-gradient(to bottom, #fff, #ffd700);
+            border-radius: 2px;
+            bottom: 70%;
+            left: 48%;
+            z-index: 7;
+            transform-origin: bottom;
+            transition: height 2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            will-change: height;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        .flame {
+            position: absolute;
+            width: 7%;
+            height: 0;
+            background: linear-gradient(to bottom, #ffef00, #ff6b00);
+            border-radius: 50% 50% 20% 20%;
+            bottom: 90%;
+            left: 46.5%;
+            z-index: 8;
+            opacity: 0;
+            box-shadow: 0 0 20px #ff9900, 0 0 40px #ff5500;
+            transition: opacity 1.5s, height 0.3s;
+            will-change: transform, opacity;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        .flame.lit {
+            opacity: 1;
+            height: 15%;
+            animation: flicker 0.5s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0% { transform: scale(1) translateZ(0); opacity: 0.9; }
+            100% { transform: scale(1.1) translateZ(0); opacity: 1; }
+        }
+        
+        /* 吹蜡烛提示 */
+        .blow-instruction {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            margin-top: 30px;
+            text-shadow: 0 0 10px #ff9e6d;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 24px;
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 2s;
+            text-align: center;
+            max-width: 90%;
+            line-height: 1.4;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        /* 鲜花雨 */
+        .flower-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        .falling-flower {
+            position: absolute;
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            top: -50px;
+            opacity: 0.8;
+            will-change: transform;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        /* 触摸区域 */
+        .touch-area {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 15;
+            background: transparent;
+        }
+        
+        /* 加载提示 */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a0b2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 107, 157, 0.3);
+            border-radius: 50%;
+            border-top-color: #ff6b9d;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg) translateZ(0); }
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载界面 -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">加载生日惊喜中...</div>
+    </div>
+    
+    <!-- 开场部分 -->
+    <section class="page-section opening-section" id="openingSection">
+        <h1 class="birthday-title">爱姐生日快乐！</h1>
+        <div class="surroundings" id="surroundings"></div>
+    </section>
+    
+    <!-- 祝福语部分 -->
+    <section class="page-section blessings-section" id="blessingsSection">
+        <div class="blessing-text" id="blessing1">祝钟爱在新的一岁</div>
+        <div class="blessing-text" id="blessing2">天天开心，万事顺意</div>
+        <div class="blessing-text" id="blessing3">和小关在新的一岁甜甜蜜蜜</div>
+        <div class="blessing-text" id="blessing4">排球越打越好</div>
+        <div class="blessing-text" id="blessing5">以后成为大医生妙手回春</div>
+    </section>
+    
+    <!-- 蛋糕部分 -->
+    <section class="page-section cake-section" id="cakeSection">
+        <div class="touch-area" id="touchArea"></div>
+        <div class="cake-container">
+            <div class="cake-body"></div>
+            <div class="cake-top"></div>
+            <div class="candle" id="candle"></div>
+            <div class="flame" id="flame"></div>
+        </div>
+        <div class="blow-instruction" id="blowInstruction">请尊贵的钟爱小姐吹灭蜡烛</div>
+    </section>
+    
+    <!-- 鲜花雨 -->
+    <div class="flower-rain" id="flowerRain"></div>
+
+    <script>
+        // 等待页面完全加载
+        window.addEventListener('load', function() {
+            const loading = document.getElementById('loading');
+            
+            // 隐藏加载界面
+            setTimeout(function() {
+                loading.style.opacity = '0';
+                setTimeout(function() {
+                    loading.style.display = 'none';
+                    initApp();
+                }, 500);
+            }, 1500);
+        });
+        
+        function initApp() {
+            // 获取DOM元素
+            const openingSection = document.getElementById('openingSection');
+            const blessingsSection = document.getElementById('blessingsSection');
+            const cakeSection = document.getElementById('cakeSection');
+            const surroundings = document.getElementById('surroundings');
+            const candle = document.getElementById('candle');
+            const flame = document.getElementById('flame');
+            const blowInstruction = document.getElementById('blowInstruction');
+            const flowerRain = document.getElementById('flowerRain');
+            const touchArea = document.getElementById('touchArea');
+            
+            const blessings = [
+                document.getElementById('blessing1'),
+                document.getElementById('blessing2'),
+                document.getElementById('blessing3'),
+                document.getElementById('blessing4'),
+                document.getElementById('blessing5')
+            ];
+            
+            let currentBlessingIndex = 0;
+            let blessingsCompleted = false;
+            let candlesLit = false;
+            let candlesBlown = false;
+            let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            // 创建蛋糕和鲜花簇拥效果 - 手机优化版
+            function createSurroundings() {
+                const cakeEmojis = ['🎂', '🍰', '🧁', '🎁', '🎀'];
+                const flowerEmojis = ['🌹', '💐', '🌸', '🌺', '🌷', '🌼', '💮'];
+                
+                // 根据设备性能调整数量
+                const numCakes = isMobile ? 6 : 10;
+                const numFlowers = isMobile ? 8 : 15;
+                
+                // 创建蛋糕
+                for (let i = 0; i < numCakes; i++) {
+                    setTimeout(() => {
+                        const cake = document.createElement('div');
+                        cake.classList.add('cake');
+                        cake.textContent = cakeEmojis[Math.floor(Math.random() * cakeEmojis.length)];
+                        
+                        const angle = (i / numCakes) * Math.PI * 2;
+                        const radius = Math.min(window.innerWidth, window.innerHeight) * 0.3;
+                        const centerX = window.innerWidth / 2;
+                        const centerY = window.innerHeight / 2;
+                        
+                        cake.style.left = `${centerX + Math.cos(angle) * radius}px`;
+                        cake.style.top = `${centerY + Math.sin(angle) * radius}px`;
+                        cake.style.fontSize = `${(Math.random() * 1 + 1.5)}rem`;
+                        cake.style.transform = `rotate(${Math.random() * 360}deg) translateZ(0)`;
+                        cake.style.animation = `pulse ${Math.random() * 2 + 1}s infinite alternate`;
+                        
+                        surroundings.appendChild(cake);
+                    }, i * 100); // 错开创建时间，减少性能压力
+                }
+                
+                // 创建鲜花
+                for (let i = 0; i < numFlowers; i++) {
+                    setTimeout(() => {
+                        const flower = document.createElement('div');
+                        flower.classList.add('flower');
+                        flower.textContent = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+                        
+                        const angle = (i / numFlowers) * Math.PI * 2;
+                        const radius = Math.min(window.innerWidth, window.innerHeight) * 0.4;
+                        const centerX = window.innerWidth / 2;
+                        const centerY = window.innerHeight / 2;
+                        
+                        flower.style.left = `${centerX + Math.cos(angle) * radius}px`;
+                        flower.style.top = `${centerY + Math.sin(angle) * radius}px`;
+                        flower.style.fontSize = `${(Math.random() * 1 + 1.5)}rem`;
+                        flower.style.transform = `rotate(${Math.random() * 360}deg) translateZ(0)`;
+                        flower.style.animation = `pulse ${Math.random() * 2 + 1.5}s infinite alternate`;
+                        
+                        surroundings.appendChild(flower);
+                    }, i * 100);
+                }
+            }
+            
+            // 切换到祝福语部分
+            function showBlessings() {
+                openingSection.style.opacity = '0';
+                setTimeout(() => {
+                    openingSection.style.display = 'none';
+                    blessingsSection.style.display = 'flex';
+                    setTimeout(() => {
+                        blessingsSection.style.opacity = '1';
+                        showNextBlessing();
+                    }, 300);
+                }, 1000);
+            }
+            
+            // 显示下一个祝福语
+            function showNextBlessing() {
+                if (currentBlessingIndex < blessings.length) {
+                    // 隐藏所有祝福语
+                    blessings.forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    
+                    // 显示当前祝福语
+                    setTimeout(() => {
+                        blessings[currentBlessingIndex].classList.add('active');
+                        
+                        currentBlessingIndex++;
+                        
+                        // 手机版缩短等待时间
+                        const delay = isMobile ? 2500 : 3000;
+                        
+                        if (currentBlessingIndex < blessings.length) {
+                            setTimeout(showNextBlessing, delay);
+                        } else {
+                            setTimeout(showCakeSection, delay);
+                            blessingsCompleted = true;
+                        }
+                    }, 100);
+                }
+            }
+            
+            // 切换到蛋糕部分
+            function showCakeSection() {
+                blessingsSection.style.opacity = '0';
+                setTimeout(() => {
+                    blessingsSection.style.display = 'none';
+                    cakeSection.style.display = 'flex';
+                    setTimeout(() => {
+                        cakeSection.style.opacity = '1';
+                        
+                        // 添加蜡烛
+                        setTimeout(() => {
+                            candle.style.height = '20%';
+                            
+                            // 点燃蜡烛
+                            setTimeout(lightCandles, 1500);
+                        }, 500);
+                    }, 300);
+                }, 1000);
+            }
+            
+            // 点燃蜡烛
+            function lightCandles() {
+                flame.style.height = '15%';
+                setTimeout(() => {
+                    flame.classList.add('lit');
+                    candlesLit = true;
+                    
+                    // 显示吹蜡烛提示
+                    setTimeout(() => {
+                        blowInstruction.style.opacity = '1';
+                        
+                        // 手机版缩短等待时间
+                        const delay = isMobile ? 2000 : 3000;
+                        setTimeout(blowOutCandles, delay);
+                    }, 1000);
+                }, 300);
+            }
+            
+            // 吹灭蜡烛
+            function blowOutCandles() {
+                if (!candlesBlown) {
+                    candlesBlown = true;
+                    
+                    // 添加吹气效果
+                    const blowEffect = document.createElement('div');
+                    blowEffect.style.position = 'absolute';
+                    blowEffect.style.width = '60%';
+                    blowEffect.style.height = '30%';
+                    blowEffect.style.background = 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)';
+                    blowEffect.style.borderRadius = '50%';
+                    blowEffect.style.bottom = '60%';
+                    blowEffect.style.left = '20%';
+                    blowEffect.style.zIndex = '9';
+                    blowEffect.style.transform = 'scale(0) translateZ(0)';
+                    blowEffect.style.transition = 'transform 0.5s, opacity 0.5s';
+                    blowEffect.style.opacity = '0.8';
+                    
+                    cakeSection.appendChild(blowEffect);
+                    
+                    // 触发吹气动画
+                    setTimeout(() => {
+                        blowEffect.style.transform = 'scale(1) translateZ(0)';
+                        
+                        // 熄灭火焰
+                        setTimeout(() => {
+                            flame.classList.remove('lit');
+                            flame.style.opacity = '0';
+                            blowEffect.style.transform = 'scale(1.5) translateZ(0)';
+                            blowEffect.style.opacity = '0';
+                            
+                            // 开始鲜花雨
+                            setTimeout(startFlowerRain, 800);
+                        }, 500);
+                    }, 100);
+                }
+            }
+            
+            // 开始鲜花雨 - 手机优化版
+            function startFlowerRain() {
+                blowInstruction.textContent = "Ann 生日快乐！";
+                blowInstruction.style.fontSize = 'clamp(1.5rem, 5vw, 2.2rem)';
+                
+                // 显示鲜花雨
+                flowerRain.style.display = 'block';
+                
+                // 创建鲜花雨
+                const flowerEmojis = ['🌹', '🌸', '🌺', '🌷', '🌼', '🎉', '🎊', '🎁'];
+                
+                function createFallingFlower() {
+                    if (!flowerRain.parentNode) return; // 确保元素还在DOM中
+                    
+                    const flower = document.createElement('div');
+                    flower.classList.add('falling-flower');
+                    flower.textContent = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+                    
+                    const startX = Math.random() * window.innerWidth;
+                    const duration = Math.random() * 4 + 3;
+                    const size = Math.random() * 1 + 1;
+                    
+                    flower.style.left = `${startX}px`;
+                    flower.style.fontSize = `${size}rem`;
+                    flower.style.animation = `fall ${duration}s linear forwards`;
+                    
+                    flowerRain.appendChild(flower);
+                    
+                    // 移除动画完成的花朵
+                    setTimeout(() => {
+                        if (flower.parentNode) {
+                            flower.remove();
+                        }
+                    }, duration * 1000);
+                }
+                
+                // 根据设备性能调整频率
+                const interval = isMobile ? 500 : 300;
+                
+                // 持续创建鲜花
+                const flowerInterval = setInterval(createFallingFlower, interval);
+                
+                // 10秒后减慢鲜花雨速度
+                setTimeout(() => {
+                    clearInterval(flowerInterval);
+                    setInterval(createFallingFlower, 1000);
+                }, 10000);
+            }
+            
+            // 触摸事件处理
+            touchArea.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                if (candlesLit && !candlesBlown) {
+                    blowOutCandles();
+                }
+            });
+            
+            touchArea.addEventListener('click', function() {
+                if (candlesLit && !candlesBlown) {
+                    blowOutCandles();
+                }
+            });
+            
+            // 键盘事件
+            document.addEventListener('keydown', function(e) {
+                if ((e.code === 'Space' || e.code === 'Enter') && candlesLit && !candlesBlown) {
+                    blowOutCandles();
+                }
+            });
+            
+            // 初始化
+            createSurroundings();
+            
+            // 手机版缩短初始等待时间
+            const initialDelay = isMobile ? 2000 : 3000;
+            setTimeout(showBlessings, initialDelay);
+            
+            // 强制重绘以触发动画
+            setTimeout(() => {
+                document.body.style.transform = 'translateZ(0)';
+            }, 100);
+        }
+    </script>
+</body>
+</html>
